@@ -18,7 +18,7 @@ import kid_banner from "./Components/Assets/banner_kids.png";
 
 import { ShopContext } from "./Context/ShopContext";
 
-export const backend_url = "http://localhost:4000";
+export const backend_url = "https://shopper-backend-q43b.onrender.com";
 export const currency = "₹";
 
 function App() {
