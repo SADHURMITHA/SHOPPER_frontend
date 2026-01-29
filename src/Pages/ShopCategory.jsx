@@ -9,7 +9,7 @@ const ShopCategory = (props) => {
   const [sortType, setSortType] = useState("");
 
   const fetchInfo = () => {
-    fetch("http://localhost:4000/allproducts")
+    fetch("https://shopper-backend-q43b.onrender.com/allproducts")
       .then((res) => res.json())
       .then((data) => setAllProducts(data));
   };
