@@ -24,7 +24,7 @@ function App() {
   const { products } = useContext(ShopContext);
 
   return (
-    <Router>
+    <Router >
       <Navbar />
 
       <Routes>
