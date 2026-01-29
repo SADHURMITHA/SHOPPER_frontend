@@ -1,5 +1,5 @@
 import Navbar from "./Components/Navbar/Navbar";
-import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { useContext } from "react";
 
 import Shop from "./Pages/Shop";
@@ -24,14 +24,12 @@ function App() {
   const { products } = useContext(ShopContext);
 
   return (
-    <Router >
+    <>
       <Navbar />
 
       <Routes>
-        {/* HOME */}
         <Route path="/" element={<Shop gender="all" />} />
 
-        {/* CATEGORY PAGES */}
         <Route
           path="/mens"
           element={<ShopCategory banner={men_banner} category="men" />}
@@ -47,17 +45,11 @@ function App() {
           element={<ShopCategory banner={kid_banner} category="kid" />}
         />
 
-        {/* PRODUCT PAGE */}
         <Route path="/product/:productId" element={<Product />} />
-
-        {/* OFFER PAGE ✅ */}
         <Route path="/offers" element={<OfferPage />} />
-
-        {/* CART & LOGIN */}
         <Route path="/cart" element={<Cart />} />
         <Route path="/login" element={<LoginSignup />} />
 
-        {/* NEW COLLECTIONS */}
         <Route
           path="/newcollections"
           element={<NewCollections data={products} />}
@@ -65,7 +57,7 @@ function App() {
       </Routes>
 
       <Footer />
-    </Router>
+    </>
   );
 }
 
