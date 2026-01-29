@@ -123,6 +123,8 @@ const LoginSignup = () => {
       if (dataObj.success) {
         localStorage.setItem("auth-token", dataObj.token);
         window.location.replace("/SHOPPER_frontend/#/");
+        window.location.reload("")
+
       } else {
         alert(dataObj.errors || "Invalid login details");
       }
@@ -153,6 +155,7 @@ const LoginSignup = () => {
       if (dataObj.success) {
         localStorage.setItem("auth-token", dataObj.token);
         window.location.replace("/SHOPPER_frontend/#/");
+        window.location.reload("")
       } else {
         alert(dataObj.errors || "Signup failed");
       }

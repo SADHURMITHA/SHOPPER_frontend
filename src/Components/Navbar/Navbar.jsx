@@ -6,9 +6,11 @@ import cart_icon from '../Assets/cart_icon.png'
 import { ShopContext } from '../../Context/ShopContext'
 import nav_dropdown from '../Assets/nav_dropdown.png'
 
+
 const Navbar = () => {
 
   let [menu,setMenu] = useState("shop");
+  
   const {getTotalCartItems} = useContext(ShopContext);
 
   const menuRef = useRef();
@@ -33,7 +35,9 @@ const Navbar = () => {
       </ul>
       <div className="nav-login-cart">
         {localStorage.getItem('auth-token')
-        ?<button onClick={()=>{localStorage.removeItem('auth-token');window.location.replace("/SHOPPER_frontend/#/");}}>Logout</button>
+        ?<button onClick={()=>{localStorage.removeItem('auth-token');
+          window.location.reload()
+          window.location.replace("/SHOPPER_frontend/#/");}}>Logout</button>
         :<Link to='/login' style={{ textDecoration: 'none' }}><button>Login</button></Link>}
         <Link to="/cart"><img src={cart_icon} alt="cart"/></Link>
         <div className="nav-cart-count">{getTotalCartItems()}</div>
