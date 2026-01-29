@@ -116,13 +116,13 @@ const LoginSignup = () => {
           body: JSON.stringify(formData),
         }
       );
-
+      console.log ("its working")
       const dataObj = await resp.json();
       console.log("Login response:", dataObj);
 
       if (dataObj.success) {
         localStorage.setItem("auth-token", dataObj.token);
-        navigate("/")
+        window.location.replace("/SHOPPER_frontend/#/");
       } else {
         alert(dataObj.errors || "Invalid login details");
       }
@@ -152,7 +152,7 @@ const LoginSignup = () => {
 
       if (dataObj.success) {
         localStorage.setItem("auth-token", dataObj.token);
-        navigate("/")
+        window.location.replace("/SHOPPER_frontend/#/");
       } else {
         alert(dataObj.errors || "Signup failed");
       }
