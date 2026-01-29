@@ -1,5 +1,5 @@
 import Navbar from "./Components/Navbar/Navbar";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { useContext } from "react";
 
 import Shop from "./Pages/Shop";
@@ -11,7 +11,6 @@ import LoginSignup from "./Pages/LoginSignup";
 import Footer from "./Components/Footer/Footer";
 import NewCollections from "./Components/NewCollections/NewCollections";
 import OfferPage from "./Components/OfferPage/OfferPage";
-
 import women_banner from "./Components/Assets/banner_women.png";
 import men_banner from "./Components/Assets/banner_mens.png";
 import kid_banner from "./Components/Assets/banner_kids.png";
