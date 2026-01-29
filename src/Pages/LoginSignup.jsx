@@ -86,8 +86,10 @@
 
 import React, { useState } from "react";
 import "./CSS/LoginSignup.css";
+import { useNavigate } from "react-router-dom";
 
 const LoginSignup = () => {
+  const navigate = useNavigate()
   const [state, setState] = useState("Login");
   const [formData, setFormData] = useState({
     username: "",
@@ -96,6 +98,7 @@ const LoginSignup = () => {
   });
 
   const changeHandler = (e) => {
+
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -119,7 +122,7 @@ const LoginSignup = () => {
 
       if (dataObj.success) {
         localStorage.setItem("auth-token", dataObj.token);
-        window.location.replace("/");
+        navigate("/")
       } else {
         alert(dataObj.errors || "Invalid login details");
       }
@@ -149,7 +152,7 @@ const LoginSignup = () => {
 
       if (dataObj.success) {
         localStorage.setItem("auth-token", dataObj.token);
-        window.location.replace("/");
+        navigate("/")
       } else {
         alert(dataObj.errors || "Signup failed");
       }
