@@ -5,8 +5,14 @@ import { ShopContext } from "../../Context/ShopContext";
 import { backend_url, currency } from "../../App";
 
 const CartItems = () => {
-  const { products, cartItems, removeFromCart, getTotalCartAmount } =
-    useContext(ShopContext);
+  const {
+    products,
+    cartItems,
+    addToCart,
+    removeFromCart,
+    clearCart,
+    getTotalCartAmount,
+  } = useContext(ShopContext);
 
   const [showPopup, setShowPopup] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState("");
@@ -17,12 +23,15 @@ const CartItems = () => {
       alert("Please select a payment method");
       return;
     }
+
+    // simulate successful payment
     setPaymentSuccess(true);
+    clearCart(); // ✅ CLEAR CART AFTER PAYMENT
   };
 
   return (
     <div className="cartitems">
-      {/* CART HEADER */}
+      {/* HEADER */}
       <div className="cartitems-format-main">
         <p>Products</p>
         <p>Title</p>
@@ -40,21 +49,40 @@ const CartItems = () => {
             <div key={e.id}>
               <div className="cartitems-format-main cartitems-format">
                 <img
-                  className="cartitems-product-icon"
                   src={backend_url + e.image}
                   alt=""
+                  className="cartitems-product-icon"
                 />
+
                 <p>{e.name}</p>
-                <p>{currency}{e.new_price}</p>
-                <button className="cartitems-quantity">
-                  {cartItems[e.id]}
-                </button>
-                <p>{currency}{e.new_price * cartItems[e.id]}</p>
+
+                <p>
+                  {currency}
+                  {e.new_price}
+                </p>
+
+                {/* QUANTITY CONTROL */}
+                <div className="quantity-control">
+                  <button onClick={() => removeFromCart(e.id)}>-</button>
+                  <span>{cartItems[e.id]}</span>
+                  <button onClick={() => addToCart(e.id)}>+</button>
+                </div>
+
+                <p>
+                  {currency}
+                  {e.new_price * cartItems[e.id]}
+                </p>
+
+                {/* REMOVE FULL ITEM */}
                 <img
                   src={cross_icon}
-                  className="cartitems-remove-icon"
                   alt=""
-                  onClick={() => removeFromCart(e.id)}
+                  className="cartitems-remove-icon"
+                  onClick={() => {
+                    for (let i = 0; i < cartItems[e.id]; i++) {
+                      removeFromCart(e.id);
+                    }
+                  }}
                 />
               </div>
               <hr />
@@ -67,10 +95,16 @@ const CartItems = () => {
       {/* TOTAL */}
       <div className="cartitems-down">
         <div className="cartitems-total">
-          <h2>Total: {currency}{getTotalCartAmount()}</h2>
-          <button onClick={() => setShowPopup(true)}>
-            PROCEED TO CHECKOUT
-          </button>
+          <h2>
+            Total: {currency}
+            {getTotalCartAmount()}
+          </h2>
+
+          {getTotalCartAmount() > 0 && (
+            <button onClick={() => setShowPopup(true)}>
+              PROCEED TO CHECKOUT
+            </button>
+          )}
         </div>
       </div>
 
@@ -78,7 +112,6 @@ const CartItems = () => {
       {showPopup && (
         <div className="popup-overlay">
           <div className="popup-box">
-
             {!paymentSuccess ? (
               <>
                 <h2>Select Payment Method</h2>
@@ -119,7 +152,6 @@ const CartItems = () => {
                   onClick={() => {
                     setShowPopup(false);
                     setSelectedPayment("");
-                    setPaymentSuccess(false);
                   }}
                 >
                   Close
@@ -142,7 +174,6 @@ const CartItems = () => {
                 </button>
               </>
             )}
-
           </div>
         </div>
       )}

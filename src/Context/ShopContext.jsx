@@ -20,31 +20,33 @@ const ShopContextProvider = (props) => {
   useEffect(() => {
     fetch(`${backend_url}/allproducts`)
       .then((res) => res.json())
-      .then((data) => setProducts(data))
+      .then((data) => setProducts(data));
 
     if (localStorage.getItem("auth-token")) {
       fetch(`${backend_url}/getcart`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          Accept: 'application/form-data',
-          'auth-token': `${localStorage.getItem("auth-token")}`,
-          'Content-Type': 'application/json',
+          Accept: "application/form-data",
+          "auth-token": localStorage.getItem("auth-token"),
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(),
       })
         .then((resp) => resp.json())
-        .then((data) => { setCartItems(data) });
+        .then((data) => setCartItems(data));
     }
-  }, [])
+  }, []);
 
   const getTotalCartAmount = () => {
     let totalAmount = 0;
     for (const item in cartItems) {
       if (cartItems[item] > 0) {
-        try {
-          let itemInfo = products.find((product) => product.id === Number(item));
+        const itemInfo = products.find(
+          (product) => product.id === Number(item)
+        );
+        if (itemInfo) {
           totalAmount += cartItems[item] * itemInfo.new_price;
-        } catch (error) {}
+        }
       }
     }
     return totalAmount;
@@ -54,10 +56,7 @@ const ShopContextProvider = (props) => {
     let totalItem = 0;
     for (const item in cartItems) {
       if (cartItems[item] > 0) {
-        try {
-          let itemInfo = products.find((product) => product.id === Number(item));
-          totalItem += itemInfo ? cartItems[item] : 0 ;
-        } catch (error) {}
+        totalItem += cartItems[item];
       }
     }
     return totalItem;
@@ -68,36 +67,56 @@ const ShopContextProvider = (props) => {
       alert("Please Login");
       return;
     }
-    setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
-    if (localStorage.getItem("auth-token")) {
-      fetch(`${backend_url}/addtocart`, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/form-data',
-          'auth-token': `${localStorage.getItem("auth-token")}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ "itemId": itemId }),
-      })
-    }
+
+    setCartItems((prev) => ({
+      ...prev,
+      [itemId]: prev[itemId] + 1,
+    }));
+
+    fetch(`${backend_url}/addtocart`, {
+      method: "POST",
+      headers: {
+        Accept: "application/form-data",
+        "auth-token": localStorage.getItem("auth-token"),
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ itemId }),
+    });
   };
 
   const removeFromCart = (itemId) => {
-    setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
-    if (localStorage.getItem("auth-token")) {
-      fetch(`${backend_url}/removefromcart`, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/form-data',
-          'auth-token': `${localStorage.getItem("auth-token")}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ "itemId": itemId }),
-      })
-    }
+    setCartItems((prev) => ({
+      ...prev,
+      [itemId]: prev[itemId] - 1,
+    }));
+
+    fetch(`${backend_url}/removefromcart`, {
+      method: "POST",
+      headers: {
+        Accept: "application/form-data",
+        "auth-token": localStorage.getItem("auth-token"),
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ itemId }),
+    });
   };
 
-  const contextValue = { products, getTotalCartItems, cartItems, addToCart, removeFromCart, getTotalCartAmount };
+ 
+  const clearCart = () => {
+    setCartItems(getDefaultCart());
+  };
+
+  
+  const contextValue = {
+    products,
+    cartItems,
+    addToCart,
+    removeFromCart,
+    clearCart,            
+    getTotalCartAmount,
+    getTotalCartItems,
+  };
+
   return (
     <ShopContext.Provider value={contextValue}>
       {props.children}
