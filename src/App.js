@@ -1,7 +1,7 @@
 import Navbar from "./Components/Navbar/Navbar";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { useContext } from "react";
-
+import { ShopContext } from "./Context/ShopContext";
 import Shop from "./Pages/Shop";
 import Cart from "./Pages/Cart";
 import Product from "./Pages/Product";
@@ -14,14 +14,17 @@ import OfferPage from "./Components/OfferPage/OfferPage";
 import women_banner from "./Components/Assets/banner_women.png";
 import men_banner from "./Components/Assets/banner_mens.png";
 import kid_banner from "./Components/Assets/banner_kids.png";
+import MyOrders from "./Pages/MyOrders";
+{/* <MyOrders token={userToken} /> */}
 
-import { ShopContext } from "./Context/ShopContext";
 
 export const backend_url = "https://shopper-backend-q43b.onrender.com";
+// export const backend_url = "http://localhost:4000";
 export const currency = "₹";
 
 function App() {
   const { products } = useContext(ShopContext);
+
 
   return (
     < >
@@ -61,6 +64,10 @@ function App() {
         <Route
           path="/newcollections"
           element={<NewCollections data={products} />}
+        />
+        <Route
+            path="/myorders"
+            element={<MyOrders/>}
         />
       </Routes>
 

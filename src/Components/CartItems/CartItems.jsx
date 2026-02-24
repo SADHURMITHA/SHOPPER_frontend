@@ -17,17 +17,44 @@ const CartItems = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState("");
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const token = localStorage.getItem("auth-token");
 
-  const handlePayNow = () => {
-    if (!selectedPayment) {
-      alert("Please select a payment method");
-      return;
-    }
+ const handlePayNow = async () => {
 
-    // simulate successful payment
-    setPaymentSuccess(true);
-    clearCart(); // ✅ CLEAR CART AFTER PAYMENT
+  if (!selectedPayment) {
+    alert("Please select a payment method");
+    return;
+  }
+
+  const orderedItems = products
+    .filter((e) => cartItems[e.id] > 0)
+    .map((e) => ({
+      productId: e.id,
+      name: e.name,
+      image: e.image,
+      quantity: cartItems[e.id],
+      price: e.new_price
+    }));
+
+  const orderData = {
+    items: orderedItems,
+    totalAmount: getTotalCartAmount(),
+    paymentMethod: selectedPayment
   };
+
+ await fetch(`${backend_url}/createorder`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "auth-token": token   // ✅ THIS IS THE FIX
+  },
+  body: JSON.stringify(orderData)
+});
+
+  setPaymentSuccess(true);
+  clearCart();
+};
+
 
   return (
     <div className="cartitems">
@@ -49,7 +76,7 @@ const CartItems = () => {
             <div key={e.id}>
               <div className="cartitems-format-main cartitems-format">
                 <img
-                  src={backend_url + e.image}
+                  src={e.image}
                   alt=""
                   className="cartitems-product-icon"
                 />

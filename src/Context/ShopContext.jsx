@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
+
 import { backend_url } from "../App";
 
 export const ShopContext = createContext(null);
@@ -6,7 +7,7 @@ export const ShopContext = createContext(null);
 const ShopContextProvider = (props) => {
 
   const [products, setProducts] = useState([]);
-
+  console.log("thiss iss",products)
   const getDefaultCart = () => {
     let cart = {};
     for (let i = 0; i < 300; i++) {
@@ -73,15 +74,15 @@ const ShopContextProvider = (props) => {
       [itemId]: prev[itemId] + 1,
     }));
 
-    fetch(`${backend_url}/addtocart`, {
-      method: "POST",
-      headers: {
-        Accept: "application/form-data",
-        "auth-token": localStorage.getItem("auth-token"),
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ itemId }),
-    });
+    // fetch(`${backend_url}/addtocart`, {
+    //   method: "POST",
+    //   headers: {
+    //     Accept: "application/form-data",
+    //     "auth-token": localStorage.getItem("auth-token"),
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ itemId }),
+    // });
   };
 
   const removeFromCart = (itemId) => {
